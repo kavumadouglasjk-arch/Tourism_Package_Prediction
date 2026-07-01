@@ -34,7 +34,7 @@ st.write(
 )
 st.divider()
 
-# ── Input form ────────────────────────────────────────────────
+# ── Customer Details ──────────────────────────────────────────
 st.subheader("Customer Details")
 col1, col2 = st.columns(2)
 

@@ -34,11 +34,11 @@ print(f"✅ Dropped columns: {drop_cols}")
 
 # Fix Gender typo: "Fe Male" → "Female"
 df["Gender"] = df["Gender"].replace({"Fe Male": "Female"})
-print("✅ Fixed Gender typo: \'Fe Male\' → \'Female\'")
+print("✅ Fixed Gender typo: 'Fe Male' → 'Female'")
 
 # Merge duplicate MaritalStatus categories: "Unmarried" → "Single"
 df["MaritalStatus"] = df["MaritalStatus"].replace({"Unmarried": "Single"})
-print("✅ Merged MaritalStatus: \'Unmarried\' → \'Single\'")
+print("✅ Merged MaritalStatus: 'Unmarried' → 'Single'")
 
 # Drop fully duplicate rows
 before = df.shape[0]

@@ -18,6 +18,8 @@ import mlflow
 import mlflow.sklearn
 import joblib
 import os
+import warnings
+warnings.filterwarnings("ignore")
 
 # ── Config ────────────────────────────────────────────────────
 HF_TOKEN         = os.environ["HF_TOKEN"]
@@ -69,7 +71,7 @@ preprocessor = ColumnTransformer(transformers=[
 
 # ── 3. Define model and hyperparameter grid ───────────────────
 # Algorithm: XGBoost (approved per rubric alongside Decision Tree,
-# Random Forest, AdaBoost, Gradient Boosting, Bagging)
+# Random Forest, AdaBoost, Gradient Boosting, and Bagging)
 xgb = XGBClassifier(
     objective="binary:logistic",
     eval_metric="logloss",
@@ -88,7 +90,7 @@ param_grid = {
     "classifier__learning_rate": [0.05, 0.1],
 }
 
-# ── 4. Tune model + log all parameters and metrics to MLflow ─
+# ── 4. Tune model and log all parameters and metrics to MLflow
 print("⏳ Running GridSearchCV — 12 candidates × 5 folds = 60 fits...")
 with mlflow.start_run(run_name="xgboost_gridsearch"):
 
@@ -138,7 +140,7 @@ with mlflow.start_run(run_name="xgboost_gridsearch"):
 
     # Log the trained pipeline as an MLflow model artifact.
     # skops_trusted_types whitelists XGBoost and sklearn internals to avoid
-    # UntrustedTypesFoundException raised by mlflow skops serialisation.
+    # UntrustedTypesFoundException raised by MLflow skops serialisation.
     mlflow.sklearn.log_model(
         sk_model=best_model,
         artifact_path="model",
@@ -146,7 +148,6 @@ with mlflow.start_run(run_name="xgboost_gridsearch"):
     )
     run_id = mlflow.active_run().info.run_id
     print(f"\n✅ MLflow model artifact logged (run_id: {run_id})")
-    print(f"   View at: http://127.0.0.1:5000/#/experiments/1/runs/{run_id}")
 
 # ── 6. Save the best model locally with joblib ───────────────
 os.makedirs(LOCAL_MODEL_DIR, exist_ok=True)
